@@ -1,5 +1,5 @@
-import os
 import time
+import os
 
 from github import Github, Repository  # needs PyGitHub
 
@@ -50,13 +50,15 @@ def copy_labels(source_repo: Repository, target_repo: Repository):
     target_labels = target_repo.get_labels()
     for label in source_labels:
         if not label_exists(target_labels, label.name):
+            print('new label: ' + label.name)
             target_repo.create_label(
                 name=label.name,
                 color=label.raw_data.get('color'),
                 description=label.raw_data.get('description')
             )
             time.sleep(2)
-
+        else:
+            print('old label: ' + label.name)
 
 def issue_exists(target_issues, title):
     """
