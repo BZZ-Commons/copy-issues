@@ -31,11 +31,17 @@ def copy_issues(source_repo: Repository, target_repo: Repository):
     target_issues = target_repo.get_issues(state='open', sort='created', direction='asc')
     for issue in source_issues:
         if not issue_exists(target_issues, issue.title):
-            target_repo.create_issue(
-                title=issue.title,
-                body=issue.body,
-                labels=issue.labels
-            )
+            if add_labels == 'true':
+                target_repo.create_issue(
+                    title=issue.title,
+                    body=issue.body,
+                    labels=issue.labels
+                )
+            else:
+                target_repo.create_issue(
+                    title=issue.title,
+                    body=issue.body
+                )
             time.sleep(5)
 
 
