@@ -8,6 +8,7 @@ env:
   TARGET_REPO: ${{ github.repository }}
   SOURCE_REPO: BZZ-Commons/copy-issues
   SCRIPT_REPO: BZZ-Commons/copy-issues
+  ADD_LABELS: "true"
 
 jobs:
   show-actor:

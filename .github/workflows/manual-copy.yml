@@ -6,7 +6,11 @@ on:
       source_repo:
         type: string
         description: 'The repo to copy the issues from'
-        required: true 
+        required: true
+      add_labels:
+        type: boolean
+        description: 'import labels'
+        required: true
 
 env:
   DEVOPS_DIR: devops
@@ -14,6 +18,7 @@ env:
   TARGET_REPO: ${{ github.repository }}
   SOURCE_REPO: ${{ inputs.source_repo }}
   SCRIPT_REPO: BZZ-Commons/copy-issues
+  ADD_LABELS: ${{ inputs.add_labels }}
 
 jobs:
   copy-issues:
@@ -26,7 +31,7 @@ jobs:
         pip install pyGithub
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Check-out the IssueCopy Repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         repository: ${{ env.SCRIPT_REPO }}
         path: ${{ env.DEVOPS_DIR }}
