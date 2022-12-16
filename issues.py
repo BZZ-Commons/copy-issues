@@ -1,5 +1,5 @@
-import os
 import time
+import os
 
 from github import Github, Repository  # needs PyGitHub
 
