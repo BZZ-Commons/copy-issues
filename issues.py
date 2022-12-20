@@ -1,21 +1,20 @@
-import time
 import os
+import time
 
 from github import Github, Repository  # needs PyGitHub
 
-github_secret = os.environ['GHSECRET']
-from_repo_name = os.environ['SOURCE_REPO']
-to_repo_name = os.environ['TARGET_REPO']
-add_labels = os.environ['ADD_LABELS']
-
+GITHUB_SECRET = os.environ['GHSECRET']
+FROM_REPO_NAME = os.environ['SOURCE_REPO']
+TO_REPO_NAME = os.environ['TARGET_REPO']
+ADD_LABELS = os.getenv('ADD_LABELS', 'false')
 
 
 def main():
-    token = Github(github_secret)
-    source_repo = token.get_repo(from_repo_name)
-    target_repo = token.get_repo(to_repo_name)
-    print('copy_labels=' + add_labels)
-    if add_labels == 'true':
+    token = Github(GITHUB_SECRET)
+    source_repo = token.get_repo(FROM_REPO_NAME)
+    target_repo = token.get_repo(TO_REPO_NAME)
+
+    if ADD_LABELS == 'true':
         copy_labels(source_repo, target_repo)
     copy_issues(source_repo, target_repo)
 
@@ -31,7 +30,7 @@ def copy_issues(source_repo: Repository, target_repo: Repository):
     target_issues = target_repo.get_issues(state='open', sort='created', direction='asc')
     for issue in source_issues:
         if not issue_exists(target_issues, issue.title):
-            if add_labels == 'true':
+            if ADD_LABELS == 'true':
                 target_repo.create_issue(
                     title=issue.title,
                     body=issue.body,
@@ -42,7 +41,7 @@ def copy_issues(source_repo: Repository, target_repo: Repository):
                     title=issue.title,
                     body=issue.body
                 )
-            time.sleep(5)
+            time.sleep(3)
 
 
 def copy_labels(source_repo: Repository, target_repo: Repository):
@@ -62,9 +61,10 @@ def copy_labels(source_repo: Repository, target_repo: Repository):
                 color=label.raw_data.get('color'),
                 description=label.raw_data.get('description')
             )
-            time.sleep(2)
+            time.sleep(3)
         else:
             print('old label: ' + label.name)
+
 
 def issue_exists(target_issues, title):
     """
