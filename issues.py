@@ -27,7 +27,7 @@ def copy_issues(source_repo: Repository, target_repo: Repository):
     :return:
     """
     source_issues = source_repo.get_issues(state='open', sort='created', direction='asc')
-    target_issues = target_repo.get_issues(state='open', sort='created', direction='asc')
+    target_issues = target_repo.get_issues(state='all', sort='created', direction='asc')
     for issue in source_issues:
         if not issue_exists(target_issues, issue.title):
             if ADD_LABELS == 'true':
