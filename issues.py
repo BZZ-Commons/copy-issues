@@ -1,5 +1,9 @@
 import os
 import time
+import warnings
+
+# Suppress deprecation warning for PyGithub authentication
+warnings.filterwarnings('ignore', category=DeprecationWarning, module='github')
 
 from github import Github, Repository  # needs PyGitHub
 
@@ -33,13 +37,13 @@ def copy_issues(source_repo: Repository, target_repo: Repository):
             if ADD_LABELS == 'true':
                 target_repo.create_issue(
                     title=issue.title,
-                    body=issue.body,
+                    body=issue.body or "",
                     labels=issue.labels
                 )
             else:
                 target_repo.create_issue(
                     title=issue.title,
-                    body=issue.body
+                    body=issue.body or ""
                 )
             time.sleep(3)
 
